@@ -7,7 +7,7 @@ import "./Permit20.sol";
 import "./Permit721.sol";
 import "./Permit1155.sol";
 
-contract Master is Permit20, Permit721, Permit1155, Multicall {
+contract PermitMaster is Permit20, Permit721, Permit1155, Multicall {
     constructor(string memory name)
     EIP712(name, "1")
     {}

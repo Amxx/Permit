@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 import "./EIP712WithNonce.sol";
 
 abstract contract Permit721 is EIP712WithNonce {
-    bytes32 private immutable _PERMIT721_TYPEHASH = keccak256("Permit721(address registry,uint256 tokenid,address from,address to,uint256 nonce,uint256 deadline)");
+    bytes32 private immutable _PERMIT721_TYPEHASH = keccak256("Permit721(address registry,uint256 tokenid,address to,uint256 nonce,uint256 deadline)");
 
     function transfer721WithSign(
         IERC721 registry,
@@ -28,7 +28,6 @@ abstract contract Permit721 is EIP712WithNonce {
                     _PERMIT721_TYPEHASH,
                     registry,
                     tokenId,
-                    from,
                     to,
                     _useNonce(from),
                     deadline
