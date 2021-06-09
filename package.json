@@ -4,6 +4,13 @@
   "description": "",
   "author": "Hadrien Croubois (@Amxx)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amxx/permit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amxx/permit/issues"
+  },
   "scripts": {
     "compile": "hardhat compile"
   },
