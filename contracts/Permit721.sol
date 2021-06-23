@@ -13,14 +13,16 @@ abstract contract Permit721 is EIP712WithNonce {
         IERC721 registry,
         uint256 tokenId,
         address to,
+        uint256 nonce,
         uint256 deadline,
         bytes memory signature
     )
         external
     {
-        require(block.timestamp <= deadline, "NFTPermit::transfer721WithSign: Expired deadline");
-
         address from = registry.ownerOf(tokenId);
+
+        require(block.timestamp <= deadline, "NFTPermit::transfer721WithSign: Expired deadline");
+        require(_verifyNonce(from, nonce));
         require(
             SignatureChecker.isValidSignatureNow(
                 from,
@@ -29,7 +31,7 @@ abstract contract Permit721 is EIP712WithNonce {
                     registry,
                     tokenId,
                     to,
-                    _useNonce(from),
+                    nonce,
                     deadline
                 ))),
                 signature

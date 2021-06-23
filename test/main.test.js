@@ -61,7 +61,7 @@ describe('Master', function () {
         registry: this.erc20.address,
         to:       this.recipient.address,
         value:    ethers.utils.parseEther('1'),
-        nonce:    await this.master.nonces(this.holder.address),
+        nonce:    await this.master['nonce(address)'](this.holder.address),
         deadline: ethers.constants.MaxUint256,
       }
       // sign permit
@@ -72,6 +72,7 @@ describe('Master', function () {
         this.holder.address,
         data.to,
         data.value,
+        data.nonce,
         data.deadline,
         signature
       )).to.emit(this.erc20, 'Transfer').withArgs(
@@ -94,7 +95,7 @@ describe('Master', function () {
         registry: this.erc721.address,
         tokenid:  '42',
         to:       this.recipient.address,
-        nonce:    await this.master.nonces(this.holder.address),
+        nonce:    await this.master['nonce(address)'](this.holder.address),
         deadline: ethers.constants.MaxUint256,
       }
       // sign permit
@@ -104,6 +105,7 @@ describe('Master', function () {
         data.registry,
         data.tokenid,
         data.to,
+        data.nonce,
         data.deadline,
         signature
       )).to.emit(this.erc721, 'Transfer').withArgs(
@@ -127,7 +129,7 @@ describe('Master', function () {
         tokenid:  '42',
         to:       this.recipient.address,
         value:    ethers.utils.parseEther('1'),
-        nonce:    await this.master.nonces(this.holder.address),
+        nonce:    await this.master['nonce(address)'](this.holder.address),
         deadline: ethers.constants.MaxUint256,
         data:     '0x',
       }
@@ -140,6 +142,7 @@ describe('Master', function () {
         this.holder.address,
         data.to,
         data.value,
+        data.nonce,
         data.deadline,
         data.data,
         signature,

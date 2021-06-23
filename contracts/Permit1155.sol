@@ -15,6 +15,7 @@ abstract contract Permit1155 is EIP712WithNonce {
         address from,
         address to,
         uint256 value,
+        uint256 nonce,
         uint256 deadline,
         bytes memory data,
         bytes memory signature
@@ -22,7 +23,7 @@ abstract contract Permit1155 is EIP712WithNonce {
         external
     {
         require(block.timestamp <= deadline, "NFTPermit::transfer1155WithSign: Expired deadline");
-
+        require(_verifyNonce(from, nonce));
         require(
             SignatureChecker.isValidSignatureNow(
                 from,
@@ -32,7 +33,7 @@ abstract contract Permit1155 is EIP712WithNonce {
                     tokenId,
                     to,
                     value,
-                    _useNonce(from),
+                    nonce,
                     deadline,
                     keccak256(data)
                 ))),
