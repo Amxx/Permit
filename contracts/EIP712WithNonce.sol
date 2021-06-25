@@ -15,7 +15,7 @@ abstract contract EIP712WithNonce is EIP712 {
         return uint256(_nonces[from][0]);
     }
 
-    function nonce(address from, uint128 timeline) public view virtual returns (uint256) {
+    function nonce(address from, uint256 timeline) public view virtual returns (uint256) {
         return _nonces[from][timeline];
     }
 
