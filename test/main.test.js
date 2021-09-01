@@ -12,6 +12,7 @@ const Permit20 = [
   { name: 'value',    type: 'uint256' },
   { name: 'nonce',    type: 'uint256' },
   { name: 'deadline', type: 'uint256' },
+  { name: 'relayer',  type: 'address' },
 ];
 const Permit721 = [
   { name: 'registry', type: 'address' },
@@ -19,6 +20,7 @@ const Permit721 = [
   { name: 'to',       type: 'address' },
   { name: 'nonce',    type: 'uint256' },
   { name: 'deadline', type: 'uint256' },
+  { name: 'relayer',  type: 'address' },
 ];
 const Permit1155 = [
   { name: 'registry', type: 'address' },
@@ -27,6 +29,7 @@ const Permit1155 = [
   { name: 'value',    type: 'uint256' },
   { name: 'nonce',    type: 'uint256' },
   { name: 'deadline', type: 'uint256' },
+  { name: 'relayer',  type: 'address' },
   { name: 'data',     type: 'bytes'   },
 ]
 
@@ -63,6 +66,7 @@ describe('Master', function () {
         value:    ethers.utils.parseEther('1'),
         nonce:    await this.master['nonce(address)'](this.holder.address),
         deadline: ethers.constants.MaxUint256,
+        relayer:  ethers.constants.AddressZero,
       }
       // sign permit
       const signature = await this.holder._signTypedData(this.domain, { Permit20 }, data);
@@ -74,6 +78,7 @@ describe('Master', function () {
         data.value,
         data.nonce,
         data.deadline,
+        data.relayer,
         signature
       )).to.emit(this.erc20, 'Transfer').withArgs(
         this.holder.address,
@@ -97,6 +102,7 @@ describe('Master', function () {
         to:       this.recipient.address,
         nonce:    await this.master['nonce(address)'](this.holder.address),
         deadline: ethers.constants.MaxUint256,
+        relayer:  ethers.constants.AddressZero,
       }
       // sign permit
       const signature = await this.holder._signTypedData(this.domain, { Permit721 }, data);
@@ -107,6 +113,7 @@ describe('Master', function () {
         data.to,
         data.nonce,
         data.deadline,
+        data.relayer,
         signature
       )).to.emit(this.erc721, 'Transfer').withArgs(
         this.holder.address,
@@ -131,6 +138,7 @@ describe('Master', function () {
         value:    ethers.utils.parseEther('1'),
         nonce:    await this.master['nonce(address)'](this.holder.address),
         deadline: ethers.constants.MaxUint256,
+        relayer:  ethers.constants.AddressZero,
         data:     '0x',
       }
       // sign permit
@@ -144,6 +152,7 @@ describe('Master', function () {
         data.value,
         data.nonce,
         data.deadline,
+        data.relayer,
         data.data,
         signature,
       )).to.emit(this.erc1155, 'TransferSingle').withArgs(

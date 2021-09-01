@@ -19,9 +19,9 @@ A user willing to use the Permit Singleton will have to grant it the authorizati
 Once approved, the singleton will be able to transfer the user's assets. For that, it requires the user to sign an authorization (following [ERC712](https://eips.ethereum.org/EIPS/eip-712) standard). There is one message format per token standard:
 
 ```
-Permit20(address registry, address to, uint256 value, uint256 nonce, uint256 deadline)
-Permit721(address registry, uint256 tokenid, address to, uint256 nonce, uint256 deadline)
-Permit1155(address registry, uint256 tokenid, address to, uint256 value, uint256 nonce, uint256 deadline, bytes data)
+Permit20(address registry,address to,uint256 value,uint256 nonce,uint256 deadline,address relayer)
+Permit721(address registry,uint256 tokenid,address to,uint256 nonce,uint256 deadline,address relayer)
+Permit1155(address registry,uint256 tokenid,address to,uint256 value,uint256 nonce,uint256 deadline,address relayer,bytes data)
 ```
 
 All signed messages come with a nonce (for replay protection), and a deadline. Once an order is signed, it can be shared across any communication channel (on-chain or off-chain). Thanks to the signature, we can safely allow anyone to relay it to the singleton that will verify the signature and execute it. This relaying is done through the following functions:
@@ -34,6 +34,7 @@ function transfer20WithSign(
   uint256 value,
   uint256 nonce,
   uint256 deadline,
+  address relayer,
   bytes memory signature
 ) external;
 
@@ -43,6 +44,7 @@ function transfer721WithSign(
   address to,
   uint256 nonce,
   uint256 deadline,
+  address relayer,
   bytes memory signature
 ) external;
 
@@ -54,6 +56,7 @@ function transfer1155WithSign(
   uint256 value,
   uint256 nonce,
   uint256 deadline,
+  address relayer,
   bytes memory data,
   bytes memory signature
 ) external;

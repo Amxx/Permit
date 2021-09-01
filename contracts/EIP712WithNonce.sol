@@ -19,7 +19,7 @@ abstract contract EIP712WithNonce is EIP712 {
         return _nonces[from][timeline];
     }
 
-    function _verifyNonce(address owner, uint256 idx) internal virtual returns (bool) {
-        return idx % (1 << 128) == _nonces[owner][idx >> 128]++;
+    function _verifyAndConsumeNonce(address owner, uint256 idx) internal virtual {
+        require(idx % (1 << 128) == _nonces[owner][idx >> 128]++, "invalid-nonce");
     }
 }

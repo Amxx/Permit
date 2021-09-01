@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol";
 import "./EIP712WithNonce.sol";
 
 abstract contract Permit721 is EIP712WithNonce {
-    bytes32 private immutable _PERMIT721_TYPEHASH = keccak256("Permit721(address registry,uint256 tokenid,address to,uint256 nonce,uint256 deadline)");
+    bytes32 private immutable _PERMIT721_TYPEHASH = keccak256("Permit721(address registry,uint256 tokenid,address to,uint256 nonce,uint256 deadline,address relayer)");
 
     function transfer721WithSign(
         IERC721 registry,
@@ -15,6 +15,7 @@ abstract contract Permit721 is EIP712WithNonce {
         address to,
         uint256 nonce,
         uint256 deadline,
+        address relayer,
         bytes memory signature
     )
         external
@@ -22,7 +23,8 @@ abstract contract Permit721 is EIP712WithNonce {
         address from = registry.ownerOf(tokenId);
 
         require(block.timestamp <= deadline, "NFTPermit::transfer721WithSign: Expired deadline");
-        require(_verifyNonce(from, nonce));
+        require(relayer == address(0) || relayer == msg.sender);
+        _verifyAndConsumeNonce(from, nonce);
         require(
             SignatureChecker.isValidSignatureNow(
                 from,
@@ -32,7 +34,8 @@ abstract contract Permit721 is EIP712WithNonce {
                     tokenId,
                     to,
                     nonce,
-                    deadline
+                    deadline,
+                    relayer
                 ))),
                 signature
             ),
